@@ -14,7 +14,9 @@ curl -sL https://raw.githubusercontent.com/shootdaj/agent-expert/main/install.sh
 
 Already have a `CLAUDE.md`? No problem - it appends to your existing file.
 
-That's it. Start Claude Code and it will automatically:
+**Restart Claude Code** (or start a new session) to load the new instructions.
+
+That's it. Claude will now automatically:
 
 1. **Read expertise** before working on any domain
 2. **Update expertise** after making changes
@@ -106,10 +108,6 @@ The expertise files persist across sessions. Knowledge compounds. Claude becomes
 See [docs/test-report.md](docs/test-report.md) for a detailed test showing the learning loop in action.
 
 **Summary**: After two code changes, the expertise file contained documented patterns that made the second change faster than the first. The learning loop works.
-
-## Note
-
-Claude Code must be restarted after installation to load the new `CLAUDE.md` instructions.
 
 ## License
 
