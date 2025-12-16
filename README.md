@@ -69,25 +69,143 @@ agent-expert/
 └── README.md
 ```
 
-## Usage Example
+## How to Use
+
+### Step 1: Setup
+
+**Option A: Use in this repo directly**
+```bash
+cd agent-expert
+claude  # Start Claude Code here
+```
+
+**Option B: Add to an existing project**
+```bash
+cp -r agent-expert/{CLAUDE.md,.claude,experts} your-project/
+cd your-project
+claude
+```
+
+Claude Code automatically reads `CLAUDE.md` on startup, gaining Agent Expert behavior.
+
+### Step 2: Initialize Expertise (Once Per Domain)
+
+Before working on a domain, create an expertise file:
 
 ```
-You: /init-expert database
+/init-expert database
+/init-expert auth
+/init-expert websocket
+```
 
-Claude: [Explores codebase, creates experts/database.md]
+Claude explores the codebase and creates `experts/{domain}.md` with:
+- Key file locations
+- Patterns and conventions found
+- Architecture overview
+- Dependencies
 
-You: /plan Add a session-based counter to track user visits
+### Step 3: The Task Workflow
 
-Claude: [Reads experts/database.md, creates detailed plan]
+For every code change, follow the three-step workflow:
+
+```
+┌────────────────────────────────────────────────────────────┐
+│ 1. PLAN                                                    │
+│                                                            │
+│    /plan Add rate limiting to the login endpoint           │
+│                                                            │
+│    Claude reads the relevant expertise file FIRST,         │
+│    then creates a plan using accumulated knowledge.        │
+└────────────────────────────────────────────────────────────┘
+                            ↓
+┌────────────────────────────────────────────────────────────┐
+│ 2. BUILD                                                   │
+│                                                            │
+│    /build                                                  │
+│                                                            │
+│    Claude executes the plan, tracking all changes,         │
+│    decisions made, and patterns used.                      │
+└────────────────────────────────────────────────────────────┘
+                            ↓
+┌────────────────────────────────────────────────────────────┐
+│ 3. SELF-IMPROVE                                            │
+│                                                            │
+│    /self-improve                                           │
+│                                                            │
+│    Claude updates the expertise file with:                 │
+│    - New patterns discovered                               │
+│    - New file locations                                    │
+│    - Gotchas encountered                                   │
+│    - Corrections to outdated info                          │
+└────────────────────────────────────────────────────────────┘
+```
+
+### Example Session
+
+```
+You: /init-expert api
+
+Claude: I'll explore the API domain in this codebase...
+
+        Found:
+        - Routes in src/api/routes/
+        - Middleware in src/api/middleware/
+        - Auth handling in src/api/routes/auth.ts
+
+        Created experts/api.md with this knowledge.
+
+You: /plan Add rate limiting to the login endpoint
+
+Claude: I've read experts/api.md. Based on my knowledge:
+        - Routes are in src/api/routes/
+        - Middleware pattern: create in middleware/, import in route
+        - Auth routes are in src/api/routes/auth.ts
+
+        ## Plan: Add Rate Limiting to Login
+
+        ### Steps
+        1. Create src/api/middleware/rate-limiter.ts
+        2. Import and apply to login route in auth.ts
+        3. Add tests for rate limit behavior
+
+        Ready to proceed?
 
 You: /build
 
-Claude: [Executes plan, tracks all changes]
+Claude: Executing plan...
+
+        ✓ Created src/api/middleware/rate-limiter.ts
+        ✓ Modified src/api/routes/auth.ts - added rate limiter
+        ✓ Added tests in src/api/__tests__/rate-limit.test.ts
+
+        Build complete. Run /self-improve to update expertise.
 
 You: /self-improve
 
-Claude: [Updates experts/database.md with new knowledge]
+Claude: Updating experts/api.md...
+
+        ## Self-Improvement Complete
+
+        ### Knowledge Added
+        - rate-limiter.ts added to middleware section
+        - Rate limiting pattern with code example
+        - New gotcha: "Redis required for distributed rate limiting"
+
+        ### Change Log Updated
+        | 2024-12-16 | Added rate limiting pattern | Login security task |
 ```
+
+### The Learning Loop
+
+Each `/self-improve` enriches the expertise file. Over time:
+
+```
+Session 1: experts/api.md has basic structure
+Session 5: experts/api.md knows all routes, middleware patterns
+Session 10: experts/api.md is comprehensive - gotchas, edge cases, examples
+```
+
+The agent becomes genuinely expert at your codebase.
 
 ## The Expertise File
 
