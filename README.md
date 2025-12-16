@@ -140,9 +140,29 @@ The expertise files persist across sessions. Knowledge compounds. Claude becomes
 
 ## Tested
 
-See [docs/test-report.md](docs/test-report.md) for a detailed test showing the learning loop in action.
+Extensively tested on **7 real-world repositories** across Python, Go, and JavaScript.
 
-**Summary**: After two code changes, the expertise file contained documented patterns that made the second change faster than the first. The learning loop works.
+| Metric | Result |
+|--------|--------|
+| Repositories Tested | 7 |
+| Expertise Files Created | 9 |
+| Lines of Documentation | 3,370+ |
+| Code Changes Made | 6 repos |
+| Languages | Python, Go, JavaScript |
+
+### E2E Test Results (with PostToolUse Hook)
+
+| Test | Result |
+|------|--------|
+| Expertise created on first task | ✅ |
+| Code follows learned patterns | ✅ |
+| Hook triggers after Edit/Write | ✅ |
+| Expertise auto-updates | ✅ |
+| Change Log maintained | ✅ |
+
+**Full Report**: [docs/extensive-testing-report.md](docs/extensive-testing-report.md)
+
+**Initial Test**: [docs/test-report.md](docs/test-report.md)
 
 ## License
 
