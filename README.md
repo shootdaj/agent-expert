@@ -2,6 +2,8 @@
 
 A self-improving agent architecture for **Claude Code** that executes and learns, automatically storing and reusing expertise at runtime.
 
+> **This repo is a template.** Copy these files into your actual projects to make Claude Code learn and become expert at your codebase.
+
 ## How to Use
 
 ### Step 1: Add to Your Project
