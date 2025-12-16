@@ -6,21 +6,21 @@ A self-improving agent architecture for **Claude Code** that executes and learns
 
 ## How to Use
 
-### Step 1: Add to Your Project
+### Step 1: Install in Your Project
+
+Run this in your project directory:
 
 ```bash
-# Clone this repo
-git clone https://github.com/shootdaj/agent-expert.git
-
-# Copy the files into your project
-cp -r agent-expert/{CLAUDE.md,.claude,experts} your-project/
-
-# Start Claude Code in your project
-cd your-project
-claude
+curl -sL https://raw.githubusercontent.com/shootdaj/agent-expert/main/install.sh | bash
 ```
 
-Claude Code automatically reads `CLAUDE.md` on startup, gaining Agent Expert behavior.
+This adds the Agent Expert files to your project. Works whether or not Claude Code is already initialized.
+
+Then start Claude Code:
+
+```bash
+claude
+```
 
 ### Step 2: Initialize Expertise (Once Per Domain)
 
