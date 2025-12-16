@@ -101,6 +101,16 @@ Normal conversation handles everything, but these exist for explicit control:
 
 The expertise files persist across sessions. Knowledge compounds. Claude becomes genuinely expert at your codebase.
 
+## Tested
+
+See [docs/test-report.md](docs/test-report.md) for a detailed test showing the learning loop in action.
+
+**Summary**: After two code changes, the expertise file contained documented patterns that made the second change faster than the first. The learning loop works.
+
+## Note
+
+Claude Code must be restarted after installation to load the new `CLAUDE.md` instructions.
+
 ## License
 
 MIT
