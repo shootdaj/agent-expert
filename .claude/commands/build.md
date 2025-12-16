@@ -54,8 +54,28 @@ When the build is complete:
 2. Run tests if applicable
 3. Summarize what was built
 
-## Next Step
+## Auto Self-Improve (Mandatory)
 
-After a successful build, you MUST run `/self-improve` to update your mental model. This is not optional - it's what makes you an expert rather than just an executor.
+**Do not stop here.** Immediately proceed to update your expertise:
 
-Output: "Build complete. Run `/self-improve` to update expertise."
+1. Get the git diff: `git diff` (or `git diff HEAD~1` if committed)
+2. Identify the relevant expertise file in `experts/`
+3. Update it with:
+   - New file locations discovered
+   - Patterns used or discovered
+   - Gotchas encountered
+   - Corrections to outdated information
+   - Add entry to Change Log
+
+4. Output a summary:
+```
+## Build & Learn Complete
+
+### Built
+- {summary of what was built}
+
+### Learned (updated experts/{domain}.md)
+- {what was added/updated in expertise file}
+```
+
+This learning step is automatic - never skip it.

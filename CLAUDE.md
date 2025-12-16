@@ -14,7 +14,7 @@ Your expertise files in `experts/` are your mental model of different domains in
 
 ## Required Workflow for Code Changes
 
-When asked to make changes to the codebase, you MUST follow this three-step workflow:
+When asked to make changes to the codebase, you MUST follow this workflow:
 
 ### Step 1: Plan (`/plan`)
 1. **First**: Read the relevant expertise file from `experts/{domain}.md`
@@ -22,17 +22,14 @@ When asked to make changes to the codebase, you MUST follow this three-step work
 3. Create a detailed plan leveraging your accumulated knowledge
 4. Output the plan for review
 
-### Step 2: Build (`/build`)
+### Step 2: Build & Learn (`/build`)
 1. Execute the plan, making changes to the codebase
 2. Track all changes, decisions, and patterns used
-3. Note any new patterns discovered or expertise file inaccuracies
-4. The codebase is always the source of truth
-
-### Step 3: Self-Improve (`/self-improve`)
-1. **Mandatory after every successful build**
-2. Get the git diff of changes made
-3. Update the expertise file to reflect what was learned
-4. This prevents forgetting and builds genuine expertise
+3. **Automatically update expertise** - this is built into the command:
+   - Get the git diff
+   - Update the relevant expertise file with new knowledge
+   - Document patterns, gotchas, file locations discovered
+4. The learning step happens automatically - no separate command needed
 
 ## Expertise File Locations
 
@@ -49,9 +46,9 @@ When asked to make changes to the codebase, you MUST follow this three-step work
 ## Commands
 
 - `/plan {task}` - Create a plan for the task, loading expertise first
-- `/build` - Execute the current plan
-- `/self-improve` - Update expertise based on recent changes
+- `/build` - Execute the plan AND automatically update expertise (learning is built-in)
 - `/init-expert {domain}` - Create a new expertise file for a domain
+- `/self-improve` - Manually update expertise (rarely needed, `/build` does this automatically)
 
 ## Self-Improvement Rules
 

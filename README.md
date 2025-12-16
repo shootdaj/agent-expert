@@ -40,7 +40,7 @@ Claude explores the codebase and creates `experts/{domain}.md` with:
 
 ### Step 3: The Task Workflow
 
-For every code change, follow the three-step workflow:
+For every code change:
 
 ```
 ┌────────────────────────────────────────────────────────────┐
@@ -53,24 +53,13 @@ For every code change, follow the three-step workflow:
 └────────────────────────────────────────────────────────────┘
                             ↓
 ┌────────────────────────────────────────────────────────────┐
-│ 2. BUILD                                                   │
+│ 2. BUILD & LEARN                                           │
 │                                                            │
 │    /build                                                  │
 │                                                            │
-│    Claude executes the plan, tracking all changes,         │
-│    decisions made, and patterns used.                      │
-└────────────────────────────────────────────────────────────┘
-                            ↓
-┌────────────────────────────────────────────────────────────┐
-│ 3. SELF-IMPROVE                                            │
-│                                                            │
-│    /self-improve                                           │
-│                                                            │
-│    Claude updates the expertise file with:                 │
-│    - New patterns discovered                               │
-│    - New file locations                                    │
-│    - Gotchas encountered                                   │
-│    - Corrections to outdated info                          │
+│    Claude executes the plan, then AUTOMATICALLY            │
+│    updates the expertise file with what was learned.       │
+│    No separate command needed - learning is built in.      │
 └────────────────────────────────────────────────────────────┘
 ```
 
@@ -112,26 +101,22 @@ Claude: Executing plan...
         ✓ Modified src/api/routes/auth.ts - added rate limiter
         ✓ Added tests in src/api/__tests__/rate-limit.test.ts
 
-        Build complete. Run /self-improve to update expertise.
+        ## Build & Learn Complete
 
-You: /self-improve
+        ### Built
+        - Rate limiting middleware for login endpoint
 
-Claude: Updating experts/api.md...
-
-        ## Self-Improvement Complete
-
-        ### Knowledge Added
-        - rate-limiter.ts added to middleware section
-        - Rate limiting pattern with code example
-        - New gotcha: "Redis required for distributed rate limiting"
-
-        ### Change Log Updated
-        | 2024-12-16 | Added rate limiting pattern | Login security task |
+        ### Learned (updated experts/api.md)
+        - Added rate-limiter.ts to middleware section
+        - Added rate limiting pattern with code example
+        - Added gotcha: "Redis required for distributed rate limiting"
 ```
+
+That's it. Two commands: `/plan` then `/build`. Learning happens automatically.
 
 ### The Learning Loop
 
-Each `/self-improve` enriches the expertise file. Over time:
+Each `/build` enriches the expertise file. Over time:
 
 ```
 Session 1: experts/api.md has basic structure
@@ -172,8 +157,7 @@ An Agent Expert maintains persistent **expertise files** - its mental model of t
 | Command | Purpose |
 |---------|---------|
 | `/plan {task}` | Create a plan, loading expertise first |
-| `/build` | Execute the plan, tracking changes |
-| `/self-improve` | Update expertise based on what was built |
+| `/build` | Execute plan AND auto-update expertise (learning built-in) |
 | `/init-expert {domain}` | Create a new expertise file |
 
 ---
