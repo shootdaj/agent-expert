@@ -12,11 +12,34 @@ Run this in your project:
 curl -sL https://raw.githubusercontent.com/shootdaj/agent-expert/main/install.sh | bash
 ```
 
-Already have a `CLAUDE.md`? No problem - it appends to your existing file.
-
 **Restart Claude Code** (or start a new session) to load the new instructions.
 
-That's it. Claude will now automatically:
+### What Gets Installed
+
+```
+your-project/
+├── CLAUDE.md                      # Instructions that make Claude an Agent Expert
+├── .claude/commands/              # Optional slash commands
+│   ├── plan.md                    #   /plan - explicit planning
+│   ├── build.md                   #   /build - explicit build with learning
+│   └── init-expert.md             #   /init-expert - create new expertise file
+└── experts/
+    └── _template.md               # Template for expertise files
+```
+
+| File | What It Does |
+|------|--------------|
+| `CLAUDE.md` | Tells Claude to read expertise before tasks and update it after changes. This is what makes the automatic learning work. |
+| `.claude/commands/*.md` | Optional slash commands for explicit control. Not required - normal conversation works. |
+| `experts/_template.md` | Template used when creating new expertise files. |
+| `experts/{domain}.md` | Created automatically as you work. These store the learned knowledge. |
+
+- **Already have a `CLAUDE.md`?** The install appends to it instead of overwriting.
+- **Files already exist?** They're skipped (won't overwrite your customizations).
+
+### What Happens After Install
+
+Claude will now automatically:
 
 1. **Read expertise** before working on any domain
 2. **Update expertise** after making changes
@@ -70,20 +93,6 @@ Claude: I'll check my expertise first...
 ```
 
 Over time, the expertise files become comprehensive - Claude genuinely becomes an expert at your codebase.
-
-## What Gets Created
-
-```
-your-project/
-├── CLAUDE.md                 # Makes Claude behave as an Agent Expert
-├── .claude/commands/         # Optional explicit commands
-│   ├── plan.md
-│   ├── build.md
-│   └── init-expert.md
-└── experts/
-    ├── _template.md          # Template for new expertise files
-    └── {domain}.md           # Expertise files (created as you work)
-```
 
 ## Optional Commands
 
