@@ -2,13 +2,13 @@
   "hooks": {
     "PostToolUse": [
       {
-        "matcher": {
-          "tools": ["Edit", "Write"]
-        },
-        "hook": {
-          "type": "prompt",
-          "prompt": "You just modified code. Remember to update the relevant expertise file in experts/ with:\n- New patterns or file locations discovered\n- Gotchas or edge cases encountered\n- Update the Change Log section\n\nThis is part of the Agent Expert learning system."
-        }
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "You just modified code. Remember to update the relevant expertise file in experts/ with:\n- New patterns or file locations discovered\n- Gotchas or edge cases encountered\n- Update the Change Log section\n\nThis is part of the Agent Expert learning system."
+          }
+        ]
       }
     ]
   }

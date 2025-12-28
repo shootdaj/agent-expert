@@ -47,9 +47,7 @@ HOOK_JSON=$(cat << 'HOOK_EOF'
   "hooks": {
     "PostToolUse": [
       {
-        "matcher": {
-          "tools": ["Edit", "Write"]
-        },
+        "matcher": "Edit|Write",
         "hooks": [
           {
             "type": "prompt",
@@ -63,19 +61,18 @@ HOOK_JSON=$(cat << 'HOOK_EOF'
 HOOK_EOF
 )
 
-# Function to fix old hook format ("hook" -> "hooks" array)
+# Function to fix old hook format (object matcher -> string, "hook" -> "hooks" array)
 fix_old_hook_format() {
     local file="$1"
-    if grep -q '"hook":' "$file" 2>/dev/null; then
+    # Check for either old format: object matcher or singular "hook"
+    if grep -qE '"matcher":\s*\{|"hook":' "$file" 2>/dev/null; then
         echo "Found old hook format in $file - fixing..."
         # Backup original
         cp "$file" "${file}.backup"
 
-        # Fix: replace "hook": { with "hooks": [{  and add closing ]
         if command -v python3 &> /dev/null; then
             python3 << 'PYEOF'
 import json
-import sys
 
 with open('.claude/settings.json', 'r') as f:
     data = json.load(f)
@@ -85,10 +82,17 @@ if 'hooks' in data:
     for event_type, event_hooks in data['hooks'].items():
         if isinstance(event_hooks, list):
             for hook_entry in event_hooks:
+                # Fix 1: Convert "hook": {...} to "hooks": [{...}]
                 if 'hook' in hook_entry and 'hooks' not in hook_entry:
-                    # Convert "hook": {...} to "hooks": [{...}]
                     hook_entry['hooks'] = [hook_entry['hook']]
                     del hook_entry['hook']
+                    modified = True
+
+                # Fix 2: Convert object matcher to string matcher
+                if isinstance(hook_entry.get('matcher'), dict):
+                    tools = hook_entry['matcher'].get('tools', [])
+                    # Convert ["Edit", "Write"] to "Edit|Write"
+                    hook_entry['matcher'] = '|'.join(tools) if tools else '*'
                     modified = True
 
 if modified:
@@ -100,7 +104,7 @@ else:
 PYEOF
         else
             echo "Warning: python3 not found. Please manually fix $file";
-            echo "Change '\"hook\": { ... }' to '\"hooks\": [{ ... }]'"
+            echo "Change matcher from object to string (e.g., \"Edit|Write\")"
         fi
     fi
 }
