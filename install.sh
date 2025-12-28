@@ -50,10 +50,12 @@ HOOK_JSON=$(cat << 'HOOK_EOF'
         "matcher": {
           "tools": ["Edit", "Write"]
         },
-        "hook": {
-          "type": "prompt",
-          "prompt": "You just modified code. Remember to update the relevant expertise file in experts/ with:\n- New patterns or file locations discovered\n- Gotchas or edge cases encountered\n- Update the Change Log section\n\nThis is part of the Agent Expert learning system."
-        }
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "You just modified code. Remember to update the relevant expertise file in experts/ with:\n- New patterns or file locations discovered\n- Gotchas or edge cases encountered\n- Update the Change Log section\n\nThis is part of the Agent Expert learning system."
+          }
+        ]
       }
     ]
   }
@@ -61,10 +63,58 @@ HOOK_JSON=$(cat << 'HOOK_EOF'
 HOOK_EOF
 )
 
+# Function to fix old hook format ("hook" -> "hooks" array)
+fix_old_hook_format() {
+    local file="$1"
+    if grep -q '"hook":' "$file" 2>/dev/null; then
+        echo "Found old hook format in $file - fixing..."
+        # Backup original
+        cp "$file" "${file}.backup"
+
+        # Fix: replace "hook": { with "hooks": [{  and add closing ]
+        if command -v python3 &> /dev/null; then
+            python3 << 'PYEOF'
+import json
+import sys
+
+with open('.claude/settings.json', 'r') as f:
+    data = json.load(f)
+
+modified = False
+if 'hooks' in data:
+    for event_type, event_hooks in data['hooks'].items():
+        if isinstance(event_hooks, list):
+            for hook_entry in event_hooks:
+                if 'hook' in hook_entry and 'hooks' not in hook_entry:
+                    # Convert "hook": {...} to "hooks": [{...}]
+                    hook_entry['hooks'] = [hook_entry['hook']]
+                    del hook_entry['hook']
+                    modified = True
+
+if modified:
+    with open('.claude/settings.json', 'w') as f:
+        json.dump(data, f, indent=2)
+    print("✓ Fixed old hook format")
+else:
+    print("No old format found to fix")
+PYEOF
+        else
+            echo "Warning: python3 not found. Please manually fix $file";
+            echo "Change '\"hook\": { ... }' to '\"hooks\": [{ ... }]'"
+        fi
+    fi
+}
+
 if [ -f "$SETTINGS_FILE" ]; then
-    echo "Found existing $SETTINGS_FILE - please manually add the Agent Expert hook."
-    echo "Hook configuration saved to .claude/agent-expert-hook.json for reference."
-    echo "$HOOK_JSON" > .claude/agent-expert-hook.json
+    # Check if this is a previous Agent Expert install with old format
+    if grep -q 'Agent Expert' "$SETTINGS_FILE" 2>/dev/null; then
+        echo "Found existing Agent Expert settings - checking format..."
+        fix_old_hook_format "$SETTINGS_FILE"
+    else
+        echo "Found existing $SETTINGS_FILE - please manually add the Agent Expert hook."
+        echo "Hook configuration saved to .claude/agent-expert-hook.json for reference."
+        echo "$HOOK_JSON" > .claude/agent-expert-hook.json
+    fi
 else
     echo "$HOOK_JSON" > "$SETTINGS_FILE"
     echo "✓ Installed PostToolUse hook for automatic expertise updates"
